@@ -52,3 +52,13 @@ func test_reaching_the_den_clears_the_stage() -> void:
 	await wait_physics_frames(4)
 	assert_false(GameState.running, "the run ended")
 	assert_true(_stage.get_node("Result").visible, "the result screen is up")
+
+
+func test_thorns_send_kai_to_their_respawn() -> void:
+	for thorns: Thorns in _stage.find_children("*", "Thorns"):
+		assert_not_null(thorns.respawn, "%s has a respawn marker" % thorns.name)
+	var thorns: Thorns = _stage.get_node("Level/Thorns1")
+	_kai.global_position = thorns.global_position + Vector2(40, 20)
+	await wait_physics_frames(3)
+	var back_x := thorns.respawn.global_position.x
+	assert_almost_eq(_kai.global_position.x, back_x, 2.0, "back to the respawn")
