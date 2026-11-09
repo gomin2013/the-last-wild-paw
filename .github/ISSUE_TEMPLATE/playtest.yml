@@ -1,0 +1,32 @@
+name: Play-test feedback
+description: You played the prototype. Tell us how it went.
+title: "Play-test: "
+labels: [playtest]
+body:
+  - type: input
+    id: build
+    attributes:
+      label: Build and computer
+      placeholder: macOS zip 0.1.0, MacBook Air M2, keyboard
+    validations:
+      required: true
+  - type: dropdown
+    id: finished
+    attributes:
+      label: Did you reach the den?
+      options: ["Yes, first try", "Yes, after retries", "No, I gave up"]
+    validations:
+      required: true
+  - type: textarea
+    id: confusing
+    attributes:
+      label: What was confusing or unfair?
+      description: Controls, a jump, the jackal, the thorns, anything you had to guess.
+  - type: textarea
+    id: feel
+    attributes:
+      label: How did running, jumping and pouncing feel?
+  - type: textarea
+    id: bugs
+    attributes:
+      label: Bugs (what you did, what happened)
