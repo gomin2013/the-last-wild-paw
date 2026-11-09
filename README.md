@@ -5,7 +5,7 @@
 A short 2D side-scroller from the animated series *The Last Wild Paw* (อุ้งเท้าป่าสุดท้าย). You play Kai, a young
 African wildcat on the prehistoric Fayum lakeshore (~4500 BCE): run, jump, pounce, find food and reach the den.
 
-**Status:** v0.1.0, one stage ("Paths by the Water"). Website: https://gomin2013.github.io/the-last-wild-paw/
+**Status:** v0.1.1, one stage ("Paths by the Water"). Website: https://gomin2013.github.io/the-last-wild-paw/
 
 **Play:** [in the browser](https://gomin2013.github.io/the-last-wild-paw/play/) · [download for macOS, Windows, Linux](https://github.com/gomin2013/the-last-wild-paw/releases/latest) ·
 [leave play-test feedback](https://github.com/gomin2013/the-last-wild-paw/issues/new?template=playtest.yml)
