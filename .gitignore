@@ -1,0 +1,58 @@
+# Godot 4
+.godot/
+.import/
+*.translation
+export_credentials.cfg
+.mono/
+data_*/
+mono_crash.*.json
+
+# Exports / builds (shipped through GitHub Releases, never committed)
+builds/
+exports/
+*.pck
+!docs/play/index.pck
+*.exe
+*.x86_64
+*.dmg
+*.app
+*.apk
+*.aab
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.history/
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.TemporaryItems
+Thumbs.db
+
+# Environment / secrets (signing, notarization, store keys)
+.env
+.env.local
+.env.*.local
+secrets.yml
+credentials.json
+*.pem
+*.key
+*.p12
+*.keystore
+*.mobileprovision
+
+# Logs / temp
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
