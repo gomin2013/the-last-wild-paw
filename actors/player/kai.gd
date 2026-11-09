@@ -1,8 +1,8 @@
 class_name Kai
 extends CharacterBody2D
-## Kai, the player: run, variable jump (coyote time + jump buffer), pounce, hurt, death. Placeholder
-## look is flat paper shapes in canon colours. Facing left shows his near (LEFT) side, so the dark
-## spot below his left eye is drawn only then; facing right shows the right side without it. Never
+## Kai, the player: run, variable jump (coyote time + jump buffer), pounce, hurt, death. Paper
+## Collage sprites from the series standees: facing left shows his LEFT side with the dark spot
+## below his left eye; facing right uses its own set drawn from the right side, without it. Never
 ## mirror Kai.
 
 signal hearts_changed(hearts: int, max_hearts: int)
@@ -10,11 +10,15 @@ signal died
 
 enum State { IDLE, RUN, JUMP, FALL, POUNCE, HURT, DEAD }
 
-const COAT := Color("c9a36a")
-const COAT_SHADE := Color("a9824e")
-const MARK := Color("4a3826")
-const EYE := Color("e0a030")
-const EAR_IN := Color("d98f6f")
+const ANIMS := {
+	State.IDLE: "idle",
+	State.RUN: "run",
+	State.JUMP: "jump",
+	State.FALL: "fall",
+	State.POUNCE: "pounce",
+	State.HURT: "hurt",
+	State.DEAD: "hurt",
+}
 
 @export_group("Run")
 @export var run_speed := 320.0
@@ -50,15 +54,18 @@ var _pounce_left := 0.0
 var _pounce_cooldown := 0.0
 var _hurt_left := 0.0
 var _since_hit := 99.0
-var _anim := 0.0
+var _offsets := {}
 
 @onready var _pounce_box: Area2D = $PounceBox
+@onready var _sprite: AnimatedSprite2D = $Sprite
 
 
 func _ready() -> void:
 	hearts = max_hearts
 	_pounce_box.monitoring = false
 	_pounce_box.body_entered.connect(_on_pounce_hit)
+	_offsets = SpriteStrips.add(_sprite, "res://assets/sprites/kai/left", "left/")
+	_offsets.merge(SpriteStrips.add(_sprite, "res://assets/sprites/kai/right", "right/"))
 
 
 func _physics_process(delta: float) -> void:
@@ -94,9 +101,8 @@ func _physics_process(delta: float) -> void:
 			state = State.RUN if absf(velocity.x) > 10.0 else State.IDLE
 		else:
 			state = State.JUMP if velocity.y < 0.0 else State.FALL
-	_anim += delta * (absf(velocity.x) / 26.0 if state == State.RUN else 2.0)
 	modulate.a = 0.5 if _since_hit < invulnerable_time and state != State.DEAD else 1.0
-	queue_redraw()
+	_update_sprite()
 
 
 func _control(dir: float, delta: float) -> void:
@@ -183,69 +189,13 @@ func _on_pounce_hit(body: Node2D) -> void:
 		body.take_pounce(global_position.x)
 
 
-func _p(x: float, y: float) -> Vector2:
-	return Vector2(x * facing, y)
-
-
-func _draw() -> void:
-	var stretch := 1.25 if state == State.POUNCE else 1.0
-	var low := 10.0 if state == State.DEAD else 0.0
-	var air := state in [State.JUMP, State.FALL]
-	var swing := sin(_anim) * 7.0 if state == State.RUN else 0.0
-
-	# Ringed tail with a dark tip, carried low behind him
-	var tail: PackedVector2Array = []
-	for i in 7:
-		var t := i / 6.0
-		tail.append(_p((-26.0 - 34.0 * t) * stretch, -26.0 + low - 10.0 * t + sin(t * 3.0) * 6.0))
-	for i in 6:
-		var c := MARK if i == 5 or i % 2 == 1 else COAT_SHADE
-		draw_line(tail[i], tail[i + 1], c, 8.0 - i * 0.4, true)
-
-	# Legs: far pair darker, near pair with dark bands
-	var legs := [
-		[-20.0, swing, COAT_SHADE],
-		[14.0, -swing, COAT_SHADE],
-		[-14.0, -swing, COAT],
-		[20.0, swing, COAT]
-	]
-	for leg: Array in legs:
-		var lx: float = leg[0] * stretch
-		var foot := _p(lx + (leg[1] as float), -2.0 + low) if not air else _p(lx + 6.0, -12.0)
-		draw_line(_p(lx, -22.0 + low), foot, leg[2], 7.0, true)
-		draw_line(
-			foot.lerp(_p(lx, -22.0 + low), 0.35), foot.lerp(_p(lx, -22.0 + low), 0.5), MARK, 7.0
-		)
-
-	# Body
-	var body: PackedVector2Array = [
-		_p(-30 * stretch, -24 + low),
-		_p(-22 * stretch, -36 + low),
-		_p(18 * stretch, -38 + low),
-		_p(30 * stretch, -30 + low),
-		_p(26 * stretch, -20 + low),
-		_p(-26 * stretch, -18 + low),
-	]
-	draw_colored_polygon(body, COAT)
-	draw_line(_p(-18 * stretch, -35 + low), _p(14 * stretch, -37 + low), COAT_SHADE, 3.0)
-
-	# Head, ears, eye, nose
-	var hx := 34.0 * stretch
-	var hy := -40.0 + low + (4.0 if state == State.POUNCE else 0.0)
-	draw_colored_polygon(
-		[
-			_p(hx - 10, hy - 8),
-			_p(hx + 6, hy - 10),
-			_p(hx + 16, hy),
-			_p(hx + 8, hy + 8),
-			_p(hx - 8, hy + 8)
-		],
-		COAT
+func _update_sprite() -> void:
+	var anim_name: String = ("left/" if facing < 0 else "right/") + ANIMS[state]
+	SpriteStrips.play(_sprite, _offsets, anim_name)
+	# The pounce lasts pounce_time; play its whole strip in that time
+	var frames := _sprite.sprite_frames
+	_sprite.speed_scale = (
+		frames.get_frame_count(anim_name) / frames.get_animation_speed(anim_name) / pounce_time
+		if state == State.POUNCE
+		else 1.0
 	)
-	draw_colored_polygon([_p(hx - 8, hy - 7), _p(hx - 4, hy - 20), _p(hx + 1, hy - 8)], COAT)
-	draw_colored_polygon([_p(hx - 6, hy - 8), _p(hx - 4, hy - 16), _p(hx - 1, hy - 8)], EAR_IN)
-	draw_circle(_p(hx + 4, hy - 2), 2.6, EYE)
-	draw_circle(_p(hx + 4.6, hy - 2), 1.1, MARK)
-	draw_circle(_p(hx + 16, hy), 1.8, MARK)
-	if facing < 0:
-		draw_circle(_p(hx + 4, hy + 3.5), 1.8, MARK)  # the spot below his LEFT eye

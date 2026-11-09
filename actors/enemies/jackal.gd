@@ -4,10 +4,6 @@ extends CharacterBody2D
 ## and ledges, hurts Kai on touch. Pounces knock it back; after the last one it runs off the screen:
 ## nothing dies on screen.
 
-const COAT := Color("9a8c7a")
-const SADDLE := Color("5e554b")
-const DARK := Color("2e2a26")
-
 @export var speed := 110.0
 @export var gravity := 2000.0
 @export var health := 2
@@ -22,10 +18,15 @@ const DARK := Color("2e2a26")
 var _stun := 0.0
 var _fleeing := false
 var _flash := 0.0
-var _anim := 0.0
+var _offsets := {}
 
 @onready var _hurtbox: Area2D = $Hurtbox
 @onready var _ledge: RayCast2D = $LedgeRay
+@onready var _sprite: AnimatedSprite2D = $Sprite
+
+
+func _ready() -> void:
+	_offsets = SpriteStrips.add(_sprite, "res://assets/sprites/jackal")
 
 
 func _physics_process(delta: float) -> void:
@@ -49,8 +50,11 @@ func _physics_process(delta: float) -> void:
 		for body in _hurtbox.get_overlapping_bodies():
 			if body.has_method("hurt"):
 				body.hurt(contact_damage, global_position.x)
-	_anim += delta * absf(velocity.x) / 24.0
-	queue_redraw()
+	# The strips face left; the jackal is not a canon-handed character, so flipping is fine
+	SpriteStrips.play(_sprite, _offsets, "defeat" if _fleeing else "hit" if _stun > 0.0 else "walk")
+	_sprite.flip_h = dir > 0
+	_sprite.offset.x *= -1.0 if dir > 0 else 1.0
+	_sprite.modulate = Color(1.6, 1.6, 1.6) if _flash > 0.0 else Color.WHITE
 
 
 func take_pounce(source_x: float) -> void:
@@ -67,34 +71,3 @@ func take_pounce(source_x: float) -> void:
 		dir = int(away)
 		collision_layer = 0
 		GameState.add_defeat(points)
-
-
-func _p(x: float, y: float) -> Vector2:
-	return Vector2(x * dir, y)
-
-
-func _draw() -> void:
-	var swing := sin(_anim) * 8.0
-	var body_color := COAT.lightened(0.5) if _flash > 0.0 else COAT
-	# Bushy tail with a dark tip
-	draw_line(_p(-34, -38), _p(-58, -22), body_color, 9.0, true)
-	draw_line(_p(-52, -25), _p(-60, -20), DARK, 9.0, true)
-	# Long legs
-	for leg: Array in [[-24.0, swing], [22.0, -swing], [-18.0, -swing], [28.0, swing]]:
-		draw_line(
-			_p(leg[0], -30),
-			_p(leg[0] + leg[1], 0),
-			SADDLE if leg[0] < -20 or leg[0] > 25 else COAT,
-			6.0
-		)
-	# Body with a darker saddle
-	draw_colored_polygon(
-		[_p(-36, -34), _p(-28, -48), _p(26, -50), _p(36, -40), _p(30, -28), _p(-30, -26)],
-		body_color
-	)
-	draw_colored_polygon([_p(-26, -46), _p(24, -48), _p(20, -42), _p(-24, -40)], SADDLE)
-	# Head: long snout, tall ears
-	draw_colored_polygon([_p(30, -48), _p(44, -56), _p(66, -46), _p(44, -40)], body_color)
-	draw_colored_polygon([_p(36, -54), _p(38, -72), _p(46, -55)], body_color)
-	draw_circle(_p(48, -50), 2.2, DARK)
-	draw_circle(_p(66, -46), 2.2, DARK)
