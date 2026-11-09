@@ -27,6 +27,7 @@ outline_color = Color(0.12, 0.14, 0.2, 1)
 
 [node name="Stage" type="Node2D"]
 script = ExtResource("stage")
+next_stage = "res://scenes/stage_fire.tscn"
 
 [node name="Sky" type="CanvasLayer" parent="."]
 layer = -100
@@ -242,6 +243,7 @@ offset_top = 380.0
 offset_right = 710.0
 offset_bottom = 420.0
 text = "← →  or  A D   run"
+metadata/touch_text = "Left / right buttons   run"
 label_settings = SubResource("hint")
 
 [node name="HintJump" type="Label" parent="Level"]
@@ -250,6 +252,7 @@ offset_top = 330.0
 offset_right = 1800.0
 offset_bottom = 370.0
 text = "Z / Space   jump   (hold for higher)"
+metadata/touch_text = "Big right button   jump   (hold for higher)"
 label_settings = SubResource("hint")
 
 [node name="HintPounce" type="Label" parent="Level"]
@@ -258,6 +261,7 @@ offset_top = 400.0
 offset_right = 3620.0
 offset_bottom = 440.0
 text = "X / J   pounce   ·   two pounces chase a jackal off"
+metadata/touch_text = "Claw button   pounce   ·   two pounces chase a jackal off"
 label_settings = SubResource("hint")
 
 [node name="HintThorns" type="Label" parent="Level"]
