@@ -1,0 +1,71 @@
+{
+ "scale": 0.5,
+ "anims": {
+  "idle": {
+   "w": 148,
+   "h": 128,
+   "frames": 4,
+   "fps": 4,
+   "loop": true,
+   "pivot": [
+    79,
+    128
+   ]
+  },
+  "run": {
+   "w": 201,
+   "h": 124,
+   "frames": 6,
+   "fps": 12,
+   "loop": true,
+   "pivot": [
+    104,
+    124
+   ]
+  },
+  "jump": {
+   "w": 195,
+   "h": 187,
+   "frames": 4,
+   "fps": 10,
+   "loop": false,
+   "pivot": [
+    118,
+    187
+   ]
+  },
+  "fall": {
+   "w": 143,
+   "h": 157,
+   "frames": 3,
+   "fps": 8,
+   "loop": true,
+   "pivot": [
+    64,
+    157
+   ]
+  },
+  "pounce": {
+   "w": 245,
+   "h": 120,
+   "frames": 5,
+   "fps": 14,
+   "loop": false,
+   "pivot": [
+    154,
+    120
+   ]
+  },
+  "hurt": {
+   "w": 140,
+   "h": 126,
+   "frames": 3,
+   "fps": 10,
+   "loop": false,
+   "pivot": [
+    80,
+    126
+   ]
+  }
+ }
+}
