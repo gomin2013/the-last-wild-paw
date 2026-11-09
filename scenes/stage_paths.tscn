@@ -56,31 +56,31 @@ plane = 1
 
 [node name="Level" type="Node2D" parent="."]
 
-[node name="Thorns1" type="Area2D" parent="Level"]
+[node name="Thorns1" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
 position = Vector2(3600, 620)
 script = ExtResource("thorns")
 size = Vector2(160, 60)
 respawn = NodePath("../RespawnPit")
 
-[node name="Thorns2" type="Area2D" parent="Level"]
+[node name="Thorns2" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
 position = Vector2(3888, 620)
 script = ExtResource("thorns")
 size = Vector2(112, 60)
 respawn = NodePath("../RespawnPit")
 
-[node name="Thorns3" type="Area2D" parent="Level"]
+[node name="Thorns3" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
 position = Vector2(4128, 620)
 script = ExtResource("thorns")
 size = Vector2(112, 60)
 respawn = NodePath("../RespawnPit")
 
-[node name="Thorns4" type="Area2D" parent="Level"]
+[node name="Thorns4" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
 position = Vector2(4440, 620)
 script = ExtResource("thorns")
 size = Vector2(160, 60)
 respawn = NodePath("../RespawnPit")
 
-[node name="ShelfThorns" type="Area2D" parent="Level"]
+[node name="ShelfThorns" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
 position = Vector2(4800, 500)
 script = ExtResource("thorns")
 size = Vector2(586, 60)
