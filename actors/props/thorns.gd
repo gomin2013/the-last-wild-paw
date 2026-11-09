@@ -2,6 +2,9 @@
 class_name Thorns
 extends Area2D
 ## Thorn scrub (FR-04): touching it costs a heart and sends Kai back to the respawn point.
+## With `water` set it is deep lake water instead (Stage 2), same rule.
+
+const SCRUB := preload("res://assets/props/thorns.png")
 
 @export var size := Vector2(160, 60):
 	set(v):
@@ -9,6 +12,10 @@ extends Area2D
 		_build()
 @export var damage := 1
 @export var respawn: Marker2D
+@export var water := false:
+	set(v):
+		water = v
+		queue_redraw()
 
 
 func _ready() -> void:
@@ -41,23 +48,38 @@ func _build() -> void:
 
 
 func _draw() -> void:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = hash(Vector2i(position))
+	if water:
+		_draw_water()
+		return
+	# The scrub stands a little taller than its hit box so the thorns read before Kai touches them
+	var h := size.y * 1.4
+	var w := h * SCRUB.get_width() / SCRUB.get_height()
 	var x := 0.0
+	var i := 0
 	while x < size.x:
-		var w := rng.randf_range(34.0, 56.0)
-		var h := rng.randf_range(size.y * 0.6, size.y)
-		var bush: PackedVector2Array = [Vector2(x, size.y)]
-		for i in 7:
-			var t := (i + 1) / 8.0
-			var r := h if i % 2 == 0 else h * 0.55
-			bush.append(Vector2(x + w * t, size.y - r * sin(t * PI)))
-		bush.append(Vector2(x + w, size.y))
-		draw_colored_polygon(bush, Color("4f4a2c") if int(x) % 2 == 0 else Color("5d5634"))
-		for i in 4:
-			var sx := x + rng.randf_range(4.0, w - 4.0)
-			var sy := size.y - rng.randf_range(6.0, h * 0.8)
-			draw_line(
-				Vector2(sx, sy), Vector2(sx + rng.randf_range(-7, 7), sy - 9), Color("d9cba8"), 2.0
-			)
+		var part := minf(w, size.x - x)
+		var src := Rect2(0, 0, part / w * SCRUB.get_width(), SCRUB.get_height())
+		# Every other bush mirrored, via the canvas transform (a negative rect size draws nothing)
+		var flip := i % 2 == 1
+		draw_set_transform(
+			Vector2(x + (part if flip else 0.0), 0), 0, Vector2(-1 if flip else 1, 1)
+		)
+		draw_texture_rect_region(SCRUB, Rect2(0, size.y - h, part, h), src)
 		x += w * 0.8
+		i += 1
+	draw_set_transform(Vector2.ZERO)
+
+
+func _draw_water() -> void:
+	# Dark water down past the screen edge, light ripple lines on top
+	draw_rect(Rect2(0, 8, size.x, 400), Color("2f4a5c"))
+	draw_rect(Rect2(0, 8, size.x, 6), Color("8fb0bf"))
+	var x := 14.0
+	while x < size.x - 30.0:
+		draw_line(
+			Vector2(x, 28 + fmod(x, 3) * 9),
+			Vector2(x + 26, 28 + fmod(x, 3) * 9),
+			Color("6f8ea0"),
+			2
+		)
+		x += 46.0

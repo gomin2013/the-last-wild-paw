@@ -5,6 +5,8 @@ extends Area2D
 ## still on this stone for hold_time reveals the line and a bonus. Optional: nothing in the stage
 ## needs it.
 
+const STONE := preload("res://assets/props/rock_small.png")  # series S1 set kit
+
 @export var hold_time := 2.0
 @export var points := 500
 
@@ -54,7 +56,5 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
-	draw_colored_polygon(
-		[Vector2(-46, 0), Vector2(-38, -14), Vector2(30, -16), Vector2(46, 0)], Color("9a8c7a")
-	)
-	draw_line(Vector2(-36, -12), Vector2(28, -14), Color("b8ab98"), 3.0)
+	var size := Vector2(STONE.get_width(), STONE.get_height()) * 0.5
+	draw_texture_rect(STONE, Rect2(Vector2(-size.x / 2.0, -size.y + 4.0), size), false)
