@@ -13,6 +13,18 @@
     });
   });
 
+  // Phone / tablet menu: the button opens the links panel; a link or Escape closes it
+  var bar = document.querySelector(".nav"), menu = document.querySelector("[data-menu]");
+  if (bar && menu) {
+    var setOpen = function (open) {
+      bar.classList.toggle("open", open);
+      menu.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    menu.addEventListener("click", function () { setOpen(!bar.classList.contains("open")); });
+    bar.querySelectorAll("nav a").forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
+  }
+
   // Reveal blocks as they enter
   var items = document.querySelectorAll(".reveal");
   if (!("IntersectionObserver" in window)) {

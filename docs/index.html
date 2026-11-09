@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="assets/img/icon-180.png">
 <link rel="preload" href="assets/fonts/anuphan.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/img/hero-back.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=cb713837">
+<link rel="stylesheet" href="assets/site.css?v=1d35cc7a">
 <script>
   // Language before first paint: saved choice, else the browser's, else Thai (the series is narrated in Thai)
   (function () {
@@ -29,7 +29,7 @@
     document.documentElement.lang = l === "en" ? "en" : "th";
   })();
 </script>
-<script src="assets/site.js?v=16e3fbc1" defer></script>
+<script src="assets/site.js?v=6e206d0d" defer></script>
 <script type="module" src="assets/hero.js"></script>
 </head>
 <body>
@@ -40,13 +40,16 @@
     <img src="assets/img/favicon-32.png" width="28" height="28" alt="">
     <span lang="th">อุ้งเท้าป่าสุดท้าย</span><span lang="en">The Last Wild Paw</span>
   </a>
-  <nav aria-label="Sections">
+  <nav id="site-nav" aria-label="Sections">
     <a href="#seasons"><span lang="th">ซีซัน</span><span lang="en">Seasons</span></a>
     <a href="#characters"><span lang="th">ตัวละคร</span><span lang="en">Characters</span></a>
     <a href="#world"><span lang="th">โลกของเรื่อง</span><span lang="en">The world</span></a>
     <a href="#music"><span lang="th">เพลง</span><span lang="en">Music</span></a>
     <a href="#game"><span lang="th">เกม</span><span lang="en">Game</span></a>
   </nav>
+  <button class="menu" type="button" data-menu aria-expanded="false" aria-controls="site-nav">
+    <span class="bars" aria-hidden="true"></span><span class="sr"><span lang="th">เมนู</span><span lang="en">Menu</span></span>
+  </button>
   <button class="lang" type="button" data-lang-toggle aria-label="Switch language">
     <span lang="th">EN</span><span lang="en">ไทย</span>
   </button>
@@ -160,6 +163,7 @@
   <section class="world" id="world" aria-labelledby="world-title">
     <div class="world-visual" aria-hidden="true">
       <img class="world-plate" src="assets/img/world-plate.webp" width="720" height="1280" loading="lazy" alt="">
+      <img class="world-mid" src="assets/img/world-mid.webp" width="720" height="1280" loading="lazy" alt="">
       <img class="world-fg" src="assets/img/world-fg.webp" width="720" height="1280" loading="lazy" alt="">
     </div>
     <div class="world-copy">

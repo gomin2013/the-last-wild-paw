@@ -92,7 +92,31 @@ body {
 		</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
-
+<style>
+#rotate { display: none; position: fixed; inset: 0; z-index: 100; place-content: center; gap: 18px; padding: 24px;
+  background: #1f2433; color: #f4ede1; font: 600 20px/1.4 system-ui, sans-serif; text-align: center; }
+#rotate svg { width: 72px; height: 72px; margin: 0 auto; animation: tilt 2.4s ease-in-out infinite; }
+@keyframes tilt { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (orientation: portrait) and (pointer: coarse) { #rotate { display: grid; } }
+html, body { touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; }
+</style>
+<script>
+// Phones and tablets play sideways: a portrait screen shows a turn-your-device card over the game.
+// Android Chrome can also go fullscreen and lock landscape on the first tap (iOS cannot, the card stays).
+addEventListener("DOMContentLoaded", function () {
+  var d = document.createElement("div");
+  d.id = "rotate";
+  d.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><div>Turn your device sideways to play<br><span lang="th">หมุนจอเป็นแนวนอนเพื่อเล่น</span></div>';
+  document.body.appendChild(d);
+  addEventListener("touchend", function lock() {
+    removeEventListener("touchend", lock);
+    var el = document.documentElement;
+    if (el.requestFullscreen && screen.orientation && screen.orientation.lock) {
+      el.requestFullscreen().then(function () { return screen.orientation.lock("landscape"); }).catch(function () {});
+    }
+  });
+});
+</script>
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -111,7 +135,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":3022280,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":5576472,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
