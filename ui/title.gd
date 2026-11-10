@@ -1,6 +1,8 @@
 extends Control
 ## Title screen (FR-01): Start, Controls, Settings, Quit (the browser build quits to the website).
 
+const STAGE_2 := "res://scenes/stage_fire.tscn"
+
 var _box: VBoxContainer
 
 
@@ -16,6 +18,7 @@ func _main() -> void:
 		body += "\nBest  %d" % GameState.best_score
 	UiKit.page(_box, "The Last Wild Paw", body)
 	UiKit.button(_box, "Start", GameState.start_game)
+	UiKit.button(_box, "Stage 2  ·  Beyond the Fire", GameState.start_game.bind(STAGE_2))
 	UiKit.button(_box, "Controls", _controls)
 	UiKit.button(_box, "Settings", _settings)
 	UiKit.button(_box, "Quit", GameState.quit_game)

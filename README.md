@@ -5,14 +5,14 @@
 A short 2D side-scroller from the animated series *The Last Wild Paw* (อุ้งเท้าป่าสุดท้าย). You play Kai, a young
 African wildcat on the prehistoric Fayum lakeshore (~4500 BCE): run, jump, pounce, find food and reach the den.
 
-**Status:** v0.1.1, one stage ("Paths by the Water"). Website: https://gomin2013.github.io/the-last-wild-paw/
+**Status:** v0.1.2, two stages ("Paths by the Water", "Beyond the Fire"), touch controls on phones and tablets. Website: https://gomin2013.github.io/the-last-wild-paw/
 
 **Play:** [in the browser](https://gomin2013.github.io/the-last-wild-paw/play/) · [download for macOS, Windows, Linux](https://github.com/gomin2013/the-last-wild-paw/releases/latest) ·
 [leave play-test feedback](https://github.com/gomin2013/the-last-wild-paw/issues/new?template=playtest.yml)
 
-| Title | Stage (placeholder art) |
-|---|---|
-| ![Title screen with Start, Controls, Settings and Quit](.github/readme/title.png) | ![Kai on the lakeshore with a jackal behind him, bird eggs, thorns and rocks ahead](.github/readme/stage.png) |
+| Title | Stage 1: Paths by the Water | Stage 2: Beyond the Fire |
+|---|---|---|
+| ![Title screen over the paper-collage lakeshore, with Start, Stage 2, Controls, Settings and Quit](.github/readme/title.png) | ![Kai face to face with a golden jackal on the lakeshore, earth pillars and a bird egg nearby](.github/readme/stage.png) | ![Kai at night near the people's camp, a fish left on a stone and a jackal behind him](.github/readme/stage_fire.png) |
 
 ## Controls
 
@@ -22,6 +22,9 @@ African wildcat on the prehistoric Fayum lakeshore (~4500 BCE): run, jump, pounc
 | Jump (hold for higher) | Z or Space | A / Cross |
 | Pounce | X or J | X / Square |
 | Pause | Esc | Start |
+
+On a phone or tablet (hold it sideways), on-screen buttons appear: left / right on the left thumb, pounce (claw) and
+jump (big triangle) on the right, pause at the top.
 
 ## Run from source
 

@@ -5,8 +5,7 @@ extends Area2D
 
 signal reached
 
-const ROCK := Color("6e6458")
-const ROCK_LIGHT := Color("9a8c7a")
+const ROCKS := preload("res://assets/props/den_rocks.png")
 
 
 func _ready() -> void:
@@ -29,28 +28,6 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _draw() -> void:
-	draw_colored_polygon(
-		[
-			Vector2(-170, 0),
-			Vector2(-140, -150),
-			Vector2(-40, -230),
-			Vector2(90, -210),
-			Vector2(170, -90),
-			Vector2(190, 0)
-		],
-		ROCK
-	)
-	draw_colored_polygon(
-		[Vector2(-120, -140), Vector2(-40, -220), Vector2(60, -200), Vector2(-30, -150)], ROCK_LIGHT
-	)
-	draw_colored_polygon(
-		[
-			Vector2(-60, 0),
-			Vector2(-56, -70),
-			Vector2(-20, -110),
-			Vector2(30, -104),
-			Vector2(60, -60),
-			Vector2(64, 0)
-		],
-		Color("2b2a2c")
-	)
+	# Series S1 set-kit den rocks, the cave mouth over the origin
+	var size := Vector2(ROCKS.get_width(), ROCKS.get_height()) * 1.1
+	draw_texture_rect(ROCKS, Rect2(Vector2(-size.x * 0.47, -size.y), size), false)

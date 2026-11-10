@@ -18,14 +18,14 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
 <link rel="preload" href="../assets/fonts/anuphan.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=cb713837">
+<link rel="stylesheet" href="../assets/site.css?v=1d35cc7a">
 <script>
   (function () {
     var l = localStorage.getItem("lwp.lang") || ((navigator.language || "th").slice(0, 2) === "th" ? "th" : "en");
     document.documentElement.lang = l === "en" ? "en" : "th";
   })();
 </script>
-<script src="../assets/site.js?v=16e3fbc1" defer></script>
+<script src="../assets/site.js?v=6e206d0d" defer></script>
 </head>
 <body class="subpage">
 <a class="skip" href="#main"><span lang="th">ข้ามไปที่เนื้อหา</span><span lang="en">Skip to content</span></a>
@@ -35,11 +35,14 @@
     <img src="../assets/img/favicon-32.png" width="28" height="28" alt="">
     <span lang="th">อุ้งเท้าป่าสุดท้าย</span><span lang="en">The Last Wild Paw</span>
   </a>
-  <nav aria-label="Pages">
+  <nav id="site-nav" aria-label="Pages">
     <a href="../episodes/"><span lang="th">ตอนทั้งหมด</span><span lang="en">Episodes</span></a>
     <a href="../characters/"><span lang="th">ตัวละคร</span><span lang="en">Characters</span></a>
     <a href="../music/" aria-current="page"><span lang="th">เพลงประกอบ</span><span lang="en">Soundtrack</span></a>
   </nav>
+  <button class="menu" type="button" data-menu aria-expanded="false" aria-controls="site-nav">
+    <span class="bars" aria-hidden="true"></span><span class="sr"><span lang="th">เมนู</span><span lang="en">Menu</span></span>
+  </button>
   <button class="lang" type="button" data-lang-toggle aria-label="Switch language">
     <span lang="th">EN</span><span lang="en">ไทย</span>
   </button>

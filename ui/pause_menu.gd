@@ -1,5 +1,6 @@
 extends CanvasLayer
-## Pause anywhere during play (FR-01): Resume, Restart, Controls, Settings, Quit to title.
+## Pause anywhere during play (FR-01): Resume, Restart, Controls, Settings, Back to Home
+## (the title screen).
 
 var enabled := true
 
@@ -31,7 +32,7 @@ func _main() -> void:
 	UiKit.button(_box, "Restart", GameState.restart_stage)
 	UiKit.button(_box, "Controls", _controls)
 	UiKit.button(_box, "Settings", _settings)
-	UiKit.button(_box, "Quit to title", GameState.to_title)
+	UiKit.button(_box, "Back to Home", GameState.to_title)
 	UiKit.focus_first(_box)
 
 

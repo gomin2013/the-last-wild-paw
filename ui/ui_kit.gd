@@ -91,9 +91,15 @@ static func focus_first(box: VBoxContainer) -> void:
 			return
 
 
-static func controls_text() -> String:
+## With `touch`, a first line names the on-screen buttons.
+static func controls_text(touch := DisplayServer.is_touchscreen_available()) -> String:
 	return (
-		"Run:  ← →  or  A D   ·   D-pad / left stick\n"
+		(
+			"Touch:  left / right buttons run   ·   big right button jumps   ·   claw pounces\n\n"
+			if touch
+			else ""
+		)
+		+ "Run:  ← →  or  A D   ·   D-pad / left stick\n"
 		+ "Jump:  Z  or  Space   ·   A / Cross  (hold to jump higher)\n"
 		+ "Pounce:  X  or  J   ·   X / Square\n"
 		+ "Pause:  Esc   ·   Start\n\n"

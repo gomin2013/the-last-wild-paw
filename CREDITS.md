@@ -8,7 +8,9 @@ The Last Wild Paw: Survival Journey is original work by Gomin Studio, based on t
 | Asset | Source | Licence |
 |---|---|---|
 | `assets/sprites/kai/**`, `assets/sprites/jackal/**` | Paper Collage sprites made from the series standees with OpenAI gpt-image (sprite-gen) | © 2026 Gomin Studio |
-| Stage art (`actors/props/**`, drawn in code) | Gomin Studio, placeholder | © 2026 Gomin Studio |
+| `assets/props/{den_rocks,rock_small,grass_tall,reed_low,reed_tall,shrub,tussock,stones,smoke}.png` | Series S1 set kit (Gomin Studio) | © 2026 Gomin Studio |
+| `assets/props/{hut,hut_side,hearth,pit,basket,fish}.png` | Series S2 set kit and creature standees (Gomin Studio) | © 2026 Gomin Studio |
+| `assets/props/{mountains,lake,ground,thorns,acacia,tamarisk}.png`, `docs/assets/img/{world-mid,hero-acacia}.webp` | Paper Collage props made with OpenAI gpt-image (sprite-gen), styled on the S1 set kit | © 2026 Gomin Studio |
 | `assets/audio/placeholder_music_curious_paws.mp3` | Series soundtrack M02 "Curious Paws" (Gomin Studio, made with Google Lyria) | © 2026 Gomin Studio |
 | `assets/audio/placeholder_*.wav` | Synthesised for the prototype | © 2026 Gomin Studio |
 | `assets/fonts/anuphan.woff2` | Anuphan by Cadson Demak (Google Fonts), subset | SIL OFL 1.1 (`assets/fonts/OFL.txt`) |

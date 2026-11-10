@@ -1,17 +1,20 @@
-// Hero: a paper diorama in three.js. Layers from the series art (back plane, reed and scrub cut-outs)
+// Hero: a paper diorama in three.js. Layers from the series art (back plane, reed and scrub cut-outs,
+// an acacia from the game's Paper Collage props)
 // sit at different depths; the camera follows the pointer so the paper planes slide past each other.
 // Scrolling through the hero dollies the camera in while the reeds part and the scrub sinks (scroll position
 // read once per frame, no scroll listener).
-// Skipped (the poster image stays) under reduced motion, Save-Data, or without WebGL.
+// Skipped (the poster image stays) under reduced motion, Save-Data, without WebGL, and on phones / tablets
+// (touch-first or narrow screens: no pointer to follow, and it saves battery and data).
 const stage = document.querySelector("[data-hero]");
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const saveData = navigator.connection && navigator.connection.saveData;
+const handheld = matchMedia("(max-width: 1024px), (hover: none) and (pointer: coarse)").matches;
 
 function hasWebGL() {
   try { return !!document.createElement("canvas").getContext("webgl2"); } catch { return false; }
 }
 
-if (stage && !reduce && !saveData && hasWebGL()) {
+if (stage && !reduce && !saveData && !handheld && hasWebGL()) {
   start().catch((e) => console.warn("hero: poster only", e));
 }
 
@@ -34,7 +37,9 @@ async function start() {
     t.anisotropy = 4;
     ok(t);
   }, undefined, fail));
-  const [back, reedsL, reedsR, scrub] = await Promise.all(["hero-back", "reeds-left", "reeds-right", "scrub"].map(load));
+  const [back, reedsL, reedsR, scrub, acacia] = await Promise.all(
+    ["hero-back", "reeds-left", "reeds-right", "scrub", "hero-acacia"].map(load)
+  );
 
   const plane = (tex, z, order) => {
     const m = new THREE.Mesh(
@@ -48,6 +53,7 @@ async function start() {
     return m;
   };
   const backM = plane(back, 0, 0);
+  const acaciaM = plane(acacia, 1.1, 1); // a lone acacia on the far shore, left of Kai
   const scrubM = plane(scrub, 2.2, 1);
   const reedLM = plane(reedsL, 3.4, 2);
   const reedRM = plane(reedsR, 3.9, 3);
@@ -97,6 +103,7 @@ async function start() {
     place(reedLM, 3.4, narrow ? 0.62 : 0.92, (vz, pw) => -vz.w / 2 + pw * 0.32, 0.42);
     place(reedRM, 3.9, narrow ? 0.55 : 0.85, (vz, pw) => vz.w / 2 - pw * 0.3, 0.4);
     place(scrubM, 2.2, narrow ? 0.22 : 0.3, (vz) => -vz.w * 0.12, 0.38);
+    place(acaciaM, 1.1, narrow ? 0.2 : 0.24, (vz, pw) => -vz.w / 2 + pw * 0.42, 1.75); // clear of the sun
 
     flecks.forEach((m) => resetFleck(m, true));
   }
