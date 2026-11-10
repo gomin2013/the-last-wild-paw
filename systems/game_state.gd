@@ -23,6 +23,7 @@ const SFX := {
 
 ## Tests point this at their own file so a test run never touches the player's best result.
 var save_path := "user://save.cfg"
+var stage_key := "paths"
 var score := 0
 var food := 0
 var defeated := 0
@@ -54,10 +55,7 @@ func _ready() -> void:
 		p.bus = "SFX"
 		add_child(p)
 		_sfx.append(p)
-	var save := ConfigFile.new()
-	if save.load(save_path) == OK:
-		best_score = save.get_value("best", "score", 0)
-		best_time = save.get_value("best", "time", 0.0)
+	_load_best()
 	var cfg := ConfigFile.new()
 	if cfg.load(SETTINGS_PATH) == OK:
 		for key: String in settings:
@@ -79,13 +77,15 @@ func _input(event: InputEvent) -> void:
 		_music.play()
 
 
-func start_game() -> void:
+func start_game(scene := STAGE_SCENE) -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file(STAGE_SCENE)
+	get_tree().change_scene_to_file(scene)
 
 
 func to_title() -> void:
 	running = false
+	stage_key = "paths"  # the title shows Stage 1's best
+	_load_best()
 	get_tree().paused = false
 	get_tree().change_scene_to_file(TITLE_SCENE)
 
@@ -102,7 +102,9 @@ func quit_game() -> void:
 		get_tree().quit()
 
 
-func start_stage() -> void:
+func start_stage(key := "paths") -> void:
+	stage_key = key
+	_load_best()
 	score = 0
 	food = 0
 	defeated = 0
@@ -139,8 +141,9 @@ func finish_stage(cleared: bool) -> Dictionary:
 		best_score = score
 		best_time = time
 		var save := ConfigFile.new()
-		save.set_value("best", "score", best_score)
-		save.set_value("best", "time", best_time)
+		save.load(save_path)
+		save.set_value(_best_section(), "score", best_score)
+		save.set_value(_best_section(), "time", best_time)
 		save.save(save_path)
 	play_sfx("clear" if cleared else "game_over")
 	return {
@@ -154,6 +157,18 @@ func finish_stage(cleared: bool) -> Dictionary:
 		"best_score": best_score,
 		"best_time": best_time,
 	}
+
+
+## Stage 1 keeps the section it had before there were more stages.
+func _best_section() -> String:
+	return "best" if stage_key == "paths" else "best_" + stage_key
+
+
+func _load_best() -> void:
+	var save := ConfigFile.new()
+	save.load(save_path)
+	best_score = save.get_value(_best_section(), "score", 0)
+	best_time = save.get_value(_best_section(), "time", 0.0)
 
 
 func play_sfx(sound: String) -> void:
