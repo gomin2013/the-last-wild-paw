@@ -62,3 +62,26 @@ func test_thorns_send_kai_to_their_respawn() -> void:
 	await wait_physics_frames(3)
 	var back_x := thorns.respawn.global_position.x
 	assert_almost_eq(_kai.global_position.x, back_x, 2.0, "back to the respawn")
+
+
+func test_touch_buttons_press_real_actions() -> void:
+	var buttons := _stage.find_children("*", "TouchScreenButton", true, false)
+	assert_eq(buttons.size(), 5, "left, right, pounce, jump, pause")
+	for b: TouchScreenButton in buttons:
+		assert_true(InputMap.has_action(b.action), "%s is an input action" % b.action)
+	var layer: CanvasLayer = buttons[0].get_parent()
+	await wait_process_frames(2)
+	assert_eq(
+		layer.visible, DisplayServer.is_touchscreen_available(), "glyphs hidden without touch"
+	)
+
+
+func test_touch_hints_drop_keyboard_keys() -> void:
+	_stage.use_touch_hints()
+	assert_string_starts_with(_stage.get_node("Level/HintJump").text, "Big right button")
+	assert_string_starts_with(_stage.get_node("Level/HintThorns").text, "Thorns", "no meta: kept")
+
+
+func test_controls_text_names_touch_buttons_only_on_touch() -> void:
+	assert_string_starts_with(UiKit.controls_text(true), "Touch:")
+	assert_string_starts_with(UiKit.controls_text(false), "Run:")
