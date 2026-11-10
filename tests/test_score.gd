@@ -15,3 +15,10 @@ func test_best_compares_score_then_time() -> void:
 	assert_false(Score.is_new_best(400, 60.0, 500, 90.0), "lower score loses even if faster")
 	assert_true(Score.is_new_best(500, 80.0, 500, 90.0), "same score, faster time wins")
 	assert_false(Score.is_new_best(500, 95.0, 500, 90.0))
+
+
+func test_progress_is_percent_of_the_way() -> void:
+	assert_eq(Score.progress(100.0, 100.0, 1100.0), 0, "at the start")
+	assert_eq(Score.progress(600.0, 100.0, 1100.0), 50)
+	assert_eq(Score.progress(-50.0, 100.0, 1100.0), 0, "behind the start clamps")
+	assert_eq(Score.progress(2000.0, 100.0, 1100.0), 100, "past the den clamps")

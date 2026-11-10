@@ -78,11 +78,13 @@ func _input(event: InputEvent) -> void:
 
 
 func start_game(scene := STAGE_SCENE) -> void:
+	_resume_music()
 	get_tree().paused = false
 	get_tree().change_scene_to_file(scene)
 
 
 func to_title() -> void:
+	_resume_music()
 	running = false
 	stage_key = "paths"  # the title shows Stage 1's best
 	_load_best()
@@ -91,8 +93,19 @@ func to_title() -> void:
 
 
 func restart_stage() -> void:
+	_resume_music()
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+## Game over cuts the music so the game-over sound stands alone; the next scene brings it back.
+func stop_music() -> void:
+	_music.stop()
+
+
+func _resume_music() -> void:
+	if _audio_started and not _music.playing:
+		_music.play()
 
 
 func quit_game() -> void:

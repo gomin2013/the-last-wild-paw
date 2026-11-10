@@ -54,6 +54,22 @@ func test_reaching_the_den_clears_the_stage() -> void:
 	assert_true(_stage.get_node("Result").visible, "the result screen is up")
 
 
+func test_game_over_shows_progress_after_the_hit_stop() -> void:
+	_kai.hurt(3, _kai.global_position.x - 10.0)
+	assert_eq(_kai.state, Kai.State.DEAD)
+	assert_lt(Engine.time_scale, 1.0, "hit-stop slows the world")
+	# The result pauses the tree, which stalls GUT waits: this timer runs paused, in real time
+	await get_tree().create_timer(1.4, true, false, true).timeout
+	assert_eq(Engine.time_scale, 1.0, "hit-stop ends")
+	var result: CanvasLayer = _stage.get_node("Result")
+	assert_true(result.visible, "the game-over screen is up")
+	var buttons := result.find_children("*", "Button", true, false)
+	assert_true(buttons[0].disabled, "buttons ignore input at first")
+	assert_string_contains(result.find_children("*", "Label", true, false)[1].text, "% of the way")
+	await get_tree().create_timer(0.6, true, false, true).timeout
+	assert_false(buttons[0].disabled, "then they work")
+
+
 func test_thorns_send_kai_to_their_respawn() -> void:
 	for thorns: Thorns in _stage.find_children("*", "Thorns"):
 		assert_not_null(thorns.respawn, "%s has a respawn marker" % thorns.name)
