@@ -101,3 +101,23 @@ func test_touch_hints_drop_keyboard_keys() -> void:
 func test_controls_text_names_touch_buttons_only_on_touch() -> void:
 	assert_string_starts_with(UiKit.controls_text(true), "Touch:")
 	assert_string_starts_with(UiKit.controls_text(false), "Run:")
+
+
+func test_an_empty_belly_costs_a_heart_and_food_refills_it() -> void:
+	_kai.hunger = 0.01
+	await wait_physics_frames(2)
+	assert_eq(_kai.hearts, 2, "starving costs a heart")
+	assert_almost_eq(_kai.hunger, _kai.starve_refill, 1.0, "and leaves a little hunger")
+	_kai.eat(100)
+	assert_gt(_kai.hunger, _kai.starve_refill + 30.0, "food fills the belly")
+
+
+func test_one_pounce_chases_each_small_animal_off_and_the_kite_stays_up() -> void:
+	var kite: Critter = _stage.get_node("Kite1")
+	var start_y := kite.position.y
+	await wait_physics_frames(30)
+	assert_almost_eq(kite.position.y, start_y, kite.swoop + 4.0, "the kite flies, it does not fall")
+	for n: String in ["Viper1", "Scorpion1", "Kite1"]:
+		var c: Critter = _stage.get_node(n)
+		c.take_pounce(c.global_position.x - 50.0)
+		assert_eq(c.collision_layer, 0, n + " runs off after one pounce")

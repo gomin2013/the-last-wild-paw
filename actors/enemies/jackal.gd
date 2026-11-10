@@ -41,15 +41,25 @@ func _physics_process(delta: float) -> void:
 		_stun -= delta
 		velocity.x = move_toward(velocity.x, 0.0, 1400.0 * delta)
 	else:
-		if is_on_floor() and (is_on_wall() or not _ledge.is_colliding()):
-			dir = -dir
-		velocity.x = dir * speed
+		_move(delta)
 	_ledge.position.x = dir * 34.0
 	move_and_slide()
 	if not _fleeing:
 		for body in _hurtbox.get_overlapping_bodies():
 			if body.has_method("hurt"):
 				body.hurt(contact_damage, global_position.x)
+	_animate()
+
+
+## Patrol: turn at walls and ledges. The other animals (viper, kite, scorpion) extend Jackal and
+## override _move and _animate; the pounce, stun and run-off rules stay shared.
+func _move(_delta: float) -> void:
+	if is_on_floor() and (is_on_wall() or not _ledge.is_colliding()):
+		dir = -dir
+	velocity.x = dir * speed
+
+
+func _animate() -> void:
 	# The strips face left; the jackal is not a canon-handed character, so flipping is fine
 	SpriteStrips.play(_sprite, _offsets, "defeat" if _fleeing else "hit" if _stun > 0.0 else "walk")
 	_sprite.flip_h = dir > 0

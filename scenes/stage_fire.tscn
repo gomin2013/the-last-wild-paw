@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://actors/props/backdrop.gd" id="backdrop"]
 [ext_resource type="PackedScene" path="res://actors/player/kai.tscn" id="kai"]
 [ext_resource type="PackedScene" path="res://actors/enemies/jackal.tscn" id="jackal"]
+[ext_resource type="Script" path="res://actors/enemies/critter.gd" id="critter"]
 [ext_resource type="Script" path="res://ui/hud.gd" id="hud"]
 [ext_resource type="Script" path="res://ui/pause_menu.gd" id="pause"]
 [ext_resource type="Script" path="res://ui/result.gd" id="result"]
@@ -283,6 +284,24 @@ dir = -1
 [node name="Jackal4" parent="." instance=ExtResource("jackal")]
 position = Vector2(5450, 560)
 dir = 1
+
+[node name="Scorpion1" parent="." instance=ExtResource("jackal")]
+position = Vector2(2250, 560)
+script = ExtResource("critter")
+dir = -1
+kind = 0
+
+[node name="Viper1" parent="." instance=ExtResource("jackal")]
+position = Vector2(2940, 560)
+script = ExtResource("critter")
+dir = -1
+kind = 1
+
+[node name="Kite1" parent="." instance=ExtResource("jackal")]
+position = Vector2(5650, 450)
+script = ExtResource("critter")
+dir = -1
+kind = 2
 
 [node name="Start" type="Marker2D" parent="."]
 position = Vector2(140, 556)

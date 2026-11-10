@@ -46,6 +46,7 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if _kai.global_position.y > kill_y:
 		_kai.hit_hazard(1, _start.global_position)
+	_hud.hunger = _kai.hunger / _kai.max_hunger
 	if sky and tint:
 		var t := clampf(_kai.global_position.x / stage_width, 0.0, 1.0)
 		$Sky/Color.color = sky.sample(t)

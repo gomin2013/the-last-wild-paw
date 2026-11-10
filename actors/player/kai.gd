@@ -43,9 +43,17 @@ const ANIMS := {
 @export var hurt_time := 0.25
 @export var knockback_speed := 280.0
 @export var knockback_lift := -320.0
+@export_group("Hunger")
+## Classic side-scroller pressure: hunger drains while the run is on, food fills it, an empty belly
+## costs a heart and leaves starve_refill so the next heart goes a little later.
+@export var max_hunger := 100.0
+@export var hunger_drain := 2.5
+@export var food_hunger := 40.0
+@export var starve_refill := 40.0
 
 var state := State.IDLE
 var hearts := 3
+var hunger := 100.0
 var facing := 1
 
 var _coyote := 0.0
@@ -62,6 +70,7 @@ var _offsets := {}
 
 func _ready() -> void:
 	hearts = max_hearts
+	hunger = max_hunger
 	_pounce_box.monitoring = false
 	_pounce_box.body_entered.connect(_on_pounce_hit)
 	_offsets = SpriteStrips.add(_sprite, "res://assets/sprites/kai/left", "left/")
@@ -70,6 +79,11 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_since_hit += delta
+	if state != State.DEAD and GameState.running:
+		hunger -= hunger_drain * delta
+		if hunger <= 0.0:
+			hunger = starve_refill
+			_take(1)
 	_pounce_cooldown = maxf(_pounce_cooldown - delta, 0.0)
 	var dir := Input.get_axis("move_left", "move_right")
 	_coyote = coyote_time if is_on_floor() else maxf(_coyote - delta, 0.0)
@@ -162,6 +176,7 @@ func hit_hazard(damage: int, respawn: Vector2) -> void:
 
 
 func eat(points: int) -> void:
+	hunger = minf(hunger + food_hunger, max_hunger)
 	var result := Score.pickup(hearts, max_hearts, points)
 	if result.x != hearts:
 		hearts = result.x
