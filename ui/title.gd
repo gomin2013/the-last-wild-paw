@@ -18,7 +18,13 @@ func _main() -> void:
 		body += "\nBest  %d" % GameState.best_score
 	UiKit.page(_box, "The Last Wild Paw", body)
 	UiKit.button(_box, "Start", GameState.start_game)
-	UiKit.button(_box, "Stage 2  ·  Beyond the Fire", GameState.start_game.bind(STAGE_2))
+	# Stage 2 opens once Stage 1 has a best result, i.e. was cleared (ADR-010)
+	var stage_2 := UiKit.button(
+		_box, "Stage 2  ·  Beyond the Fire", GameState.start_game.bind(STAGE_2)
+	)
+	if GameState.best_time <= 0.0:
+		stage_2.disabled = true
+		stage_2.text = "Stage 2  ·  clear Stage 1 first"
 	UiKit.button(_box, "Controls", _controls)
 	UiKit.button(_box, "Settings", _settings)
 	UiKit.button(_box, "Quit", GameState.quit_game)
