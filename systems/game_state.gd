@@ -32,6 +32,9 @@ var easter_egg := false
 var running := false
 var best_score := 0
 var best_time := 0.0
+## Last checkpoint reached this stage: {"stage", "pos", "run"}; empty when none. Kept across
+## restart_stage() only, so "Try again" starts there.
+var checkpoint := {}
 var settings := {"master": 0.8, "music": 0.6, "sfx": 0.8, "fullscreen": false}
 
 var _music := AudioStreamPlayer.new()
@@ -78,11 +81,15 @@ func _input(event: InputEvent) -> void:
 
 
 func start_game(scene := STAGE_SCENE) -> void:
+	checkpoint = {}
+	_resume_music()
 	get_tree().paused = false
 	get_tree().change_scene_to_file(scene)
 
 
 func to_title() -> void:
+	checkpoint = {}
+	_resume_music()
 	running = false
 	stage_key = "paths"  # the title shows Stage 1's best
 	_load_best()
@@ -91,8 +98,19 @@ func to_title() -> void:
 
 
 func restart_stage() -> void:
+	_resume_music()
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+## Game over cuts the music so the game-over sound stands alone; the next scene brings it back.
+func stop_music() -> void:
+	_music.stop()
+
+
+func _resume_music() -> void:
+	if _audio_started and not _music.playing:
+		_music.play()
 
 
 func quit_game() -> void:
@@ -110,8 +128,38 @@ func start_stage(key := "paths") -> void:
 	defeated = 0
 	time = 0.0
 	easter_egg = false
+	if checkpoint.get("stage") == key:
+		var run: Dictionary = checkpoint["run"]
+		score = run["score"]
+		food = run["food"]
+		defeated = run["defeated"]
+		time = run["time"]
+		easter_egg = run["easter_egg"]
+	else:
+		checkpoint = {}
 	running = true
 	changed.emit()
+
+
+## Saves the spot and the run so far; a retry restores both, so it can't beat a full run's time.
+func set_checkpoint(pos: Vector2) -> void:
+	checkpoint = {
+		"stage": stage_key,
+		"pos": pos,
+		"run":
+		{
+			"score": score,
+			"food": food,
+			"defeated": defeated,
+			"time": time,
+			"easter_egg": easter_egg,
+		},
+	}
+
+
+## x of the checkpoint reached in this stage, or -INF.
+func checkpoint_x() -> float:
+	return checkpoint["pos"].x if checkpoint.get("stage") == stage_key else -INF
 
 
 func add_food(points: int) -> void:
@@ -136,6 +184,8 @@ func add_bonus(points: int) -> void:
 ## Ends the run and returns what the result screen shows. Only a cleared run can set a new best.
 func finish_stage(cleared: bool) -> Dictionary:
 	running = false
+	if cleared:
+		checkpoint = {}
 	var new_best := cleared and Score.is_new_best(score, time, best_score, best_time)
 	if new_best:
 		best_score = score
