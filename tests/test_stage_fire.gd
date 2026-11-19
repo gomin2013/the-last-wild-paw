@@ -44,3 +44,30 @@ func test_offering_clears_and_keeps_its_own_best() -> void:
 	assert_eq(GameState.best_score, 300)
 	GameState.start_stage("paths")
 	assert_eq(GameState.best_score, 0, "Stage 1's best is untouched")
+
+
+func test_title_locks_stage_2_until_stage_1_is_cleared() -> void:
+	var saved := GameState.best_time
+	for cleared in [false, true]:
+		GameState.best_time = 95.0 if cleared else 0.0
+		var title: Control = load("res://scenes/main.tscn").instantiate()
+		add_child_autofree(title)
+		var stage_2: Button
+		for b: Button in title.find_children("*", "Button", true, false):
+			if b.text.begins_with("Stage 2"):
+				stage_2 = b
+		assert_eq(stage_2.disabled, not cleared, "locked unless Stage 1 has a best")
+	GameState.best_time = saved
+
+
+func test_food_comes_often_enough_to_outrun_hunger() -> void:
+	# Half run speed allows for jumps, fights and backtracking
+	var xs: Array[float] = [_stage.get_node("Start").global_position.x]
+	for f in _stage.get_node("Level").find_children("Food*", "Area2D", false):
+		xs.append(f.global_position.x)
+	xs.append(_stage.get_node("Den").global_position.x)
+	xs.sort()
+	for i in range(1, xs.size()):
+		var secs: float = (xs[i] - xs[i - 1]) / (_kai.run_speed * 0.5)
+		assert_lt(secs * _kai.hunger_drain, _kai.max_hunger, "food gap at x %d is too long" % xs[i])
+	assert_gt(_stage.get_node("Den").global_position.x, 11000.0, "stage 2 has its long middle")
