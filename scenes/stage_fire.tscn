@@ -5,11 +5,13 @@
 [ext_resource type="Script" path="res://actors/props/thorns.gd" id="thorns"]
 [ext_resource type="Script" path="res://actors/props/food.gd" id="food"]
 [ext_resource type="Script" path="res://actors/props/listening_stone.gd" id="stone"]
+[ext_resource type="Script" path="res://actors/props/checkpoint.gd" id="checkpoint"]
 [ext_resource type="Script" path="res://actors/props/offering.gd" id="offering"]
 [ext_resource type="Script" path="res://actors/props/campfire.gd" id="campfire"]
 [ext_resource type="Script" path="res://actors/props/backdrop.gd" id="backdrop"]
 [ext_resource type="PackedScene" path="res://actors/player/kai.tscn" id="kai"]
 [ext_resource type="PackedScene" path="res://actors/enemies/jackal.tscn" id="jackal"]
+[ext_resource type="Script" path="res://actors/enemies/critter.gd" id="critter"]
 [ext_resource type="Script" path="res://ui/hud.gd" id="hud"]
 [ext_resource type="Script" path="res://ui/pause_menu.gd" id="pause"]
 [ext_resource type="Script" path="res://ui/result.gd" id="result"]
@@ -37,6 +39,7 @@ outline_color = Color(0.12, 0.14, 0.2, 1)
 [node name="Stage" type="Node2D"]
 script = ExtResource("stage")
 stage_key = "fire"
+stage_width = 12000
 clear_title = "Food on the stone"
 sky = SubResource("sky")
 tint = SubResource("tint")
@@ -71,7 +74,7 @@ script = ExtResource("backdrop")
 plane = 1
 
 [node name="Camp" type="Node2D" parent="."]
-position = Vector2(6780, 560)
+position = Vector2(11780, 560)
 script = ExtResource("campfire")
 
 [node name="Level" type="Node2D" parent="."]
@@ -169,7 +172,7 @@ kind = 1
 [node name="Ground3" type="StaticBody2D" parent="Level"]
 position = Vector2(3800, 560)
 script = ExtResource("ground")
-size = Vector2(3200, 200)
+size = Vector2(1400, 200)
 kind = 0
 
 [node name="ShelfStep" type="StaticBody2D" parent="Level"]
@@ -197,7 +200,7 @@ size = Vector2(60, 760)
 kind = 1
 
 [node name="WallRight" type="StaticBody2D" parent="Level"]
-position = Vector2(7000, 0)
+position = Vector2(12000, 0)
 script = ExtResource("ground")
 size = Vector2(60, 760)
 kind = 1
@@ -229,7 +232,7 @@ position = Vector2(4500, 320)
 script = ExtResource("food")
 
 [node name="Food5" type="Area2D" parent="Level"]
-position = Vector2(5800, 500)
+position = Vector2(10800, 500)
 script = ExtResource("food")
 
 [node name="HintAlone" type="Label" parent="Level"]
@@ -257,15 +260,126 @@ text = "Jackals hunt at night. Two pounces still chase one off."
 label_settings = SubResource("hint")
 
 [node name="HintFire" type="Label" parent="Level"]
-offset_left = 5700.0
+offset_left = 10700.0
 offset_top = 330.0
-offset_right = 6400.0
+offset_right = 11400.0
 offset_bottom = 370.0
 text = "The people left food on a stone, then went in."
 label_settings = SubResource("hint")
 
-[node name="Den" type="Area2D" parent="."]
+[node name="Checkpoint1" type="Area2D" parent="Level"]
+position = Vector2(3900, 560)
+script = ExtResource("checkpoint")
+
+[node name="Marsh" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
+position = Vector2(5200, 600)
+script = ExtResource("thorns")
+size = Vector2(900, 60)
+respawn = NodePath("../RespawnMarsh")
+water = true
+
+[node name="MarshStone1" type="StaticBody2D" parent="Level"]
+position = Vector2(5320, 500)
+script = ExtResource("ground")
+size = Vector2(128, 260)
+kind = 1
+
+[node name="MarshStone2" type="StaticBody2D" parent="Level"]
+position = Vector2(5560, 500)
+script = ExtResource("ground")
+size = Vector2(128, 260)
+kind = 1
+
+[node name="MarshStone3" type="StaticBody2D" parent="Level"]
+position = Vector2(5800, 500)
+script = ExtResource("ground")
+size = Vector2(128, 260)
+kind = 1
+
+[node name="Ground4" type="StaticBody2D" parent="Level"]
 position = Vector2(6100, 560)
+script = ExtResource("ground")
+size = Vector2(5900, 200)
+kind = 0
+
+[node name="HighStep" type="StaticBody2D" parent="Level"]
+position = Vector2(6500, 470)
+script = ExtResource("ground")
+size = Vector2(128, 90)
+kind = 1
+
+[node name="HighShelf" type="StaticBody2D" parent="Level"]
+position = Vector2(6660, 380)
+script = ExtResource("ground")
+size = Vector2(500, 48)
+kind = 1
+
+[node name="HighShelfSupport" type="StaticBody2D" parent="Level"]
+position = Vector2(7096, 428)
+script = ExtResource("ground")
+size = Vector2(64, 132)
+kind = 1
+
+[node name="Bramble1" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
+position = Vector2(7700, 520)
+script = ExtResource("thorns")
+size = Vector2(90, 40)
+respawn = NodePath("../RespawnBramble")
+
+[node name="Bramble2" type="Area2D" parent="Level" node_paths=PackedStringArray("respawn")]
+position = Vector2(8000, 520)
+script = ExtResource("thorns")
+size = Vector2(110, 40)
+respawn = NodePath("../RespawnBramble")
+
+[node name="RespawnMarsh" type="Marker2D" parent="Level"]
+position = Vector2(5100, 556)
+
+[node name="RespawnBramble" type="Marker2D" parent="Level"]
+position = Vector2(7580, 556)
+
+[node name="Food6" type="Area2D" parent="Level"]
+position = Vector2(5624, 450)
+script = ExtResource("food")
+
+[node name="Food7" type="Area2D" parent="Level"]
+position = Vector2(6900, 330)
+script = ExtResource("food")
+
+[node name="Food8" type="Area2D" parent="Level"]
+position = Vector2(7910, 500)
+script = ExtResource("food")
+
+[node name="Food9" type="Area2D" parent="Level"]
+position = Vector2(8900, 500)
+script = ExtResource("food")
+
+[node name="Food10" type="Area2D" parent="Level"]
+position = Vector2(9800, 500)
+script = ExtResource("food")
+
+[node name="HintMarsh" type="Label" parent="Level"]
+offset_left = 5080.0
+offset_top = 300.0
+offset_right = 5780.0
+offset_bottom = 340.0
+text = "The marsh is deep at night. Stone to stone."
+label_settings = SubResource("hint")
+
+[node name="HintSmoke" type="Label" parent="Level"]
+offset_left = 8350.0
+offset_top = 300.0
+offset_right = 9050.0
+offset_bottom = 340.0
+text = "The smoke is close now. Keep going."
+label_settings = SubResource("hint")
+
+[node name="Checkpoint2" type="Area2D" parent="Level"]
+position = Vector2(8300, 560)
+script = ExtResource("checkpoint")
+
+[node name="Den" type="Area2D" parent="."]
+position = Vector2(11100, 560)
 script = ExtResource("offering")
 
 [node name="Jackal1" parent="." instance=ExtResource("jackal")]
@@ -277,11 +391,59 @@ position = Vector2(4500, 380)
 dir = 1
 
 [node name="Jackal3" parent="." instance=ExtResource("jackal")]
-position = Vector2(5200, 560)
+position = Vector2(10200, 560)
 dir = -1
 
 [node name="Jackal4" parent="." instance=ExtResource("jackal")]
-position = Vector2(5450, 560)
+position = Vector2(10450, 560)
+dir = 1
+
+[node name="Scorpion1" parent="." instance=ExtResource("jackal")]
+position = Vector2(2250, 560)
+script = ExtResource("critter")
+dir = -1
+kind = 0
+
+[node name="Viper1" parent="." instance=ExtResource("jackal")]
+position = Vector2(2940, 560)
+script = ExtResource("critter")
+dir = -1
+kind = 1
+
+[node name="Kite1" parent="." instance=ExtResource("jackal")]
+position = Vector2(10650, 450)
+script = ExtResource("critter")
+dir = -1
+kind = 2
+
+[node name="Kite2" parent="." instance=ExtResource("jackal")]
+position = Vector2(6300, 450)
+script = ExtResource("critter")
+dir = -1
+kind = 2
+
+[node name="Jackal5" parent="." instance=ExtResource("jackal")]
+position = Vector2(7000, 560)
+dir = 1
+
+[node name="Viper2" parent="." instance=ExtResource("jackal")]
+position = Vector2(7450, 560)
+script = ExtResource("critter")
+dir = -1
+kind = 1
+
+[node name="Scorpion2" parent="." instance=ExtResource("jackal")]
+position = Vector2(8700, 560)
+script = ExtResource("critter")
+dir = -1
+kind = 0
+
+[node name="Jackal6" parent="." instance=ExtResource("jackal")]
+position = Vector2(9200, 560)
+dir = -1
+
+[node name="Jackal7" parent="." instance=ExtResource("jackal")]
+position = Vector2(9600, 560)
 dir = 1
 
 [node name="Start" type="Marker2D" parent="."]

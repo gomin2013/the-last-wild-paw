@@ -18,3 +18,10 @@ static func is_new_best(score: int, time: float, best_score: int, best_time: flo
 	if score != best_score:
 		return score > best_score
 	return time < best_time
+
+
+## How far Kai got, 0-100: his x between the start and the clear zone.
+static func progress(x: float, start_x: float, end_x: float) -> int:
+	if end_x <= start_x:
+		return 100
+	return roundi(clampf((x - start_x) / (end_x - start_x), 0.0, 1.0) * 100.0)
